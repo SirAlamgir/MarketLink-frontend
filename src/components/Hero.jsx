@@ -23,8 +23,8 @@ export default function Hero({ searchQuery, setSearchQuery, onSearchSubmit, onOp
   }, []);
 
   return (
-    <section className="relative text-white overflow-hidden" style={{ minHeight: '600px' }}>
-      
+    <section className="relative text-white isolate" style={{ minHeight: '600px' }}>
+
       {/* Background with Parallax */}
       <div className="absolute inset-0 z-0">
         <div ref={heroRef} className="absolute inset-0 will-change-transform">
@@ -48,10 +48,10 @@ export default function Hero({ searchQuery, setSearchQuery, onSearchSubmit, onOp
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 lg:px-8 pt-14 pb-28 flex flex-col lg:flex-row items-start lg:items-center gap-12">
-        
+
         {/* Left: Text Content */}
         <div className="flex-1 space-y-6 animate-fadeInScale">
-          
+
           {/* Live Badge */}
           <div className="inline-flex items-center gap-2 bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 px-4 py-2 rounded-full text-xs font-extrabold uppercase tracking-wider backdrop-blur-md shadow-xl shadow-emerald-950/30">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
@@ -121,9 +121,9 @@ export default function Hero({ searchQuery, setSearchQuery, onSearchSubmit, onOp
       </div>
 
       {/* Floating Search Bar */}
-      <div className="relative z-20 max-w-5xl mx-auto w-full px-4 -mb-8 pb-2">
+      <div className="absolute bottom-0 left-0 right-0 translate-y-1/2 z-20 max-w-5xl mx-auto w-full px-4">
         <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-3 shadow-2xl border border-emerald-200/50 flex flex-col md:flex-row items-center gap-3 text-xs hover:shadow-3xl transition-shadow duration-300">
-          
+
           <div className="w-full md:w-1/4 bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center gap-2 text-slate-800 font-bold hover:border-emerald-300 transition">
             <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
             <div className="flex-1 truncate">

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -47,61 +47,65 @@ function HomePage({
 }) {
   const navigate = useNavigate();
   return (
-    <div className="space-y-12 lg:space-y-20 py-4">
-      <Hero
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        onSearchSubmit={() => navigate("/browse-markets")}
-        onOpenAiBot={() => setIsAiBotOpen(true)}
-        onOpenAuthModal={(mode = "signin", accountType = "customer") => {
-          setAuthModalMode(mode);
-          setAuthModalAccountType(accountType);
-          setIsAuthModalOpen(true);
-        }}
-        currentUser={currentUser}
-        onNavigate={(view) => navigate(view === "home" ? "/" : `/${view}`)}
-      />
-      <HowItWorks />
-      <MarketExplorer
-        markets={MARKETS}
-        selectedMarket={selectedMarket}
-        onSelectMarket={(market) => {
-          setSelectedMarket(market);
-          showToast(`Selected "${market.market_name}" for pickup!`);
-        }}
-        onOpenMarketDetail={(market) => setSelectedMarketModal(market)}
-      />
-      <LogisticsMap
-        onOpenMarketDetail={(market) => setSelectedMarketModal(market || MARKETS[0])}
-      />
-      <FarmerSpotlight
-        farmers={FARMERS}
-        onOpenFarmerDetail={handleOpenFarmerDetail}
-      />
-      <HarvestBanner
-        onReserveClick={() => {
-          const s = document.getElementById("produce");
-          if (s) s.scrollIntoView({ behavior: "smooth" });
-        }}
-      />
-      <ProductCatalog
-        products={[...realProducts, ...PRODUCTS]}
-        categories={CATEGORIES}
-        activeCategory={activeCategory}
-        onSelectCategory={setActiveCategory}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        favorites={favorites}
-        onToggleFavorite={handleToggleFavorite}
-        onAddToCart={handleAddToCart}
-        onOpenFarmerDetail={handleOpenFarmerDetail}
-        onOpenProductDetail={(prod) => setSelectedProductModal(prod)}
-      />
-      <CustomerReviews
-        reviews={reviewsList}
-        onOpenWriteReview={() => setIsReviewModalOpen(true)}
-      />
-      <MarketMap onNavigate={(view) => navigate(view === "home" ? "/" : `/${view}`)} />
+    <div className="py-4">
+      <div className="mb-20 lg:mb-28">
+        <Hero
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          onSearchSubmit={() => navigate("/browse-markets")}
+          onOpenAiBot={() => setIsAiBotOpen(true)}
+          onOpenAuthModal={(mode = "signin", accountType = "customer") => {
+            setAuthModalMode(mode);
+            setAuthModalAccountType(accountType);
+            setIsAuthModalOpen(true);
+          }}
+          currentUser={currentUser}
+          onNavigate={(view) => navigate(view === "home" ? "/" : `/${view}`)}
+        />
+      </div>
+      <div className="space-y-12 lg:space-y-20">
+        <HowItWorks />
+        <MarketExplorer
+          markets={MARKETS}
+          selectedMarket={selectedMarket}
+          onSelectMarket={(market) => {
+            setSelectedMarket(market);
+            showToast(`Selected "${market.market_name}" for pickup!`);
+          }}
+          onOpenMarketDetail={(market) => setSelectedMarketModal(market)}
+        />
+        <LogisticsMap
+          onOpenMarketDetail={(market) => setSelectedMarketModal(market || MARKETS[0])}
+        />
+        <FarmerSpotlight
+          farmers={FARMERS}
+          onOpenFarmerDetail={handleOpenFarmerDetail}
+        />
+        <HarvestBanner
+          onReserveClick={() => {
+            const s = document.getElementById("produce");
+            if (s) s.scrollIntoView({ behavior: "smooth" });
+          }}
+        />
+        <ProductCatalog
+          products={[...realProducts, ...PRODUCTS]}
+          categories={CATEGORIES}
+          activeCategory={activeCategory}
+          onSelectCategory={setActiveCategory}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          favorites={favorites}
+          onToggleFavorite={handleToggleFavorite}
+          onAddToCart={handleAddToCart}
+          onOpenFarmerDetail={handleOpenFarmerDetail}
+          onOpenProductDetail={(prod) => setSelectedProductModal(prod)}
+        />
+        <CustomerReviews
+          reviews={reviewsList}
+          onOpenWriteReview={() => setIsReviewModalOpen(true)}
+        />
+        <MarketMap onNavigate={(view) => navigate(view === "home" ? "/" : `/${view}`)} />
+      </div>
     </div>
   );
 }
