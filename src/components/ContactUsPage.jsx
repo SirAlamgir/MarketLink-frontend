@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle2, MessageSquare, Leaf, ChevronDown, ChevronUp, Store, Users, Sparkles, Camera, AtSign, Globe, Headphones, AlertCircle, ShieldCheck } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Mail, Phone, MapPin, Clock, Send, CheckCircle2, MessageSquare, Leaf, ChevronDown, ChevronUp, Store, Users, Sparkles, Camera, AtSign, Globe, Headphones, AlertCircle, ShieldCheck, ShoppingBag } from 'lucide-react';
+
 
 const FAQS = [
   { id: 1, question: 'How do I cancel or modify a pre-order?', answer: 'You can cancel or modify your pre-order up to 24 hours before your chosen market pickup window. Contact the farmer directly via MarketBot AI, or email us at support@marketlink.pk with your Order ID. Full release of reservation is granted with zero penalty fees.' },
@@ -17,7 +18,67 @@ const CONTACT_INFO = [
   { icon: Clock, label: 'Support Hours', value: 'Mon - Sat', sub: '9:00 AM - 7:00 PM PKT', color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-200', href: null }
 ];
 
+/* ─── Animated FAQ Accordion Item ──────────────────────────── */
+function FaqItem({ faq, isOpen, onToggle }) {
+  const contentRef = useRef(null);
+
+  return (
+    <div
+      className={`border rounded-2xl shadow-sm transition-all duration-300 overflow-hidden hover-card-3d ${
+        isOpen
+          ? 'border-emerald-400 shadow-md shadow-emerald-500/10 bg-white'
+          : 'bg-slate-50/90 hover:bg-white border-slate-200/90'
+      }`}
+    >
+      <button
+        type="button"
+        onClick={onToggle}
+        className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer group"
+        aria-expanded={isOpen}
+      >
+        <span className="font-extrabold text-sm text-slate-900 font-heading leading-snug flex items-center gap-2">
+          {/* Colored dot indicator */}
+          <span
+            className={`w-2 h-2 rounded-full shrink-0 transition-all duration-300 ${
+              isOpen ? 'bg-emerald-500 scale-125' : 'bg-slate-300'
+            }`}
+          />
+          {faq.question}
+        </span>
+        {/* Rotating chevron */}
+        <div
+          className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300 ${
+            isOpen ? 'bg-emerald-100 text-emerald-700 rotate-180' : 'bg-slate-200 text-slate-600 rotate-0'
+          }`}
+        >
+          <ChevronDown className="w-4 h-4" />
+        </div>
+      </button>
+
+      {/* Smooth height + opacity animation via max-height */}
+      <div
+        ref={contentRef}
+        style={{
+          maxHeight: isOpen ? `${contentRef.current?.scrollHeight ?? 400}px` : '0px',
+          opacity: isOpen ? 1 : 0,
+          transition: 'max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.28s ease',
+        }}
+        className="overflow-hidden"
+      >
+        <div className="px-5 pb-5">
+          {/* Animated left-border accent line */}
+          <div className="flex gap-4">
+            <div className={`w-0.5 rounded-full bg-emerald-400 self-stretch shrink-0 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`} />
+            <p className="text-xs text-slate-600 leading-relaxed font-normal">{faq.answer}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ContactUsPage({ onNavigate, onOpenAiBot }) {
+
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: 'general', message: '', userType: 'customer' });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -154,8 +215,24 @@ export default function ContactUsPage({ onNavigate, onOpenAiBot }) {
 
       {/* 4. FAQS */}
       <section className='max-w-4xl mx-auto px-4 lg:px-8 space-y-6'>
-        <div className='text-center space-y-2'><span className='text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-3.5 py-1.5 rounded-full border border-emerald-300 inline-block mb-2'>FREQUENTLY ASKED QUESTIONS</span><h2 className='text-3xl font-extrabold text-slate-900 font-heading'>Got Questions? We Have Answers.</h2><p className='text-slate-500 text-xs sm:text-sm max-w-xl mx-auto'>Everything you need to know about placing weekend pre-orders, visiting pickup stalls, and joining our farmer network.</p></div>
-        <div className='space-y-3'>{FAQS.map((faq) => { const isOpen = openFaq === faq.id; return (<div key={faq.id} className={'bg-slate-50/90 hover:bg-white border rounded-2xl shadow-sm transition-all overflow-hidden hover-card-3d ' + (isOpen ? 'border-emerald-400 shadow-md shadow-emerald-500/10 bg-white' : 'border-slate-200/90')}><button type='button' onClick={() => setOpenFaq(isOpen ? null : faq.id)} className='w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer'><span className='font-extrabold text-sm text-slate-900 font-heading leading-snug'>{faq.question}</span><div className={'w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition ' + (isOpen ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600')}>{isOpen ? <ChevronUp className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />}</div></button>{isOpen && (<div className='px-5 pb-5 text-xs text-slate-600 leading-relaxed font-normal animate-fadeIn'><div className='h-px bg-emerald-100 mb-4' /><p>{faq.answer}</p></div>)}</div>); })}</div>
+        <div className='text-center space-y-2'>
+          <span className='text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-3.5 py-1.5 rounded-full border border-emerald-300 inline-block mb-2'>FREQUENTLY ASKED QUESTIONS</span>
+          <h2 className='text-3xl font-extrabold text-slate-900 font-heading'>Got Questions? We Have Answers.</h2>
+          <p className='text-slate-500 text-xs sm:text-sm max-w-xl mx-auto'>Everything you need to know about placing weekend pre-orders, visiting pickup stalls, and joining our farmer network.</p>
+        </div>
+        <div className='space-y-3'>
+          {FAQS.map((faq) => {
+            const isOpen = openFaq === faq.id;
+            return (
+              <FaqItem
+                key={faq.id}
+                faq={faq}
+                isOpen={isOpen}
+                onToggle={() => setOpenFaq(isOpen ? null : faq.id)}
+              />
+            );
+          })}
+        </div>
       </section>
 
       {/* 5. BOTTOM CTA BANNER */}
